@@ -60,7 +60,7 @@ The arrow head is always on the security group which contains the rule represent
 
 ### asggrapherShowDefault
 
-With asggrapherShowDefault: true, you'll have on your graph all the SGs, included the default Openstack SG:
+With asggrapherShowDefault: true, you'll have on your graph all the SGs, included the default AWS SG:
 
 ![Example](DefaultSG.jpg)
 
