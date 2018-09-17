@@ -1,0 +1,22 @@
+---
+# defaults file for aws-securitygroup-grapher
+
+# do you want to see default security group
+asggrapherShowDefault: false
+
+# do you want to see instances with their security groups
+asggrapherShowInstances: false
+
+# see https://www.graphviz.org/doc/info/attrs.html#d:rankdir
+# possible values:
+# LR, left to right
+# RL, right to left
+# TB, top to bottom
+# BT, bottom to top
+asggrapherRankdir: "LR"
+
+asggrapherDotFileToRender: "./awsCloudGrapher.dot"
+
+asggrapherFileToRender: "./awsCloudGrapher.png"
+
+asggrapherServerLabel: "Servers"

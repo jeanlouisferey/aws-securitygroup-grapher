@@ -1,0 +1,51 @@
+---
+# tasks file for aws-securitygroup-grapher
+
+# 1 - get instances information
+# 2 - get security group and rules information
+
+- name: verify needed variables
+  assert:
+    that: "{{ item }} is defined"
+    msg: "{{ item }} need to be defined and must not be empty"
+  with_items:
+    - awsRegion
+    - awsVPC
+
+- name: verify if dot is installed
+  shell: "dot --help"
+  ignore_errors: true
+  register: asggraphercmd_out
+
+- name: alert if dot is not installed
+  assert:
+    that: asggraphercmd_out.rc != 0
+    msg: "dot (from graphviz) has to be installed to use this role"
+
+- name: Get VPC information
+  ec2_vpc_net_facts:
+    region: "{{ awsRegion }}"
+    filters:
+      "tag:Name": "{{ awsVPC }}"
+  register: return_vpcs
+
+# Get instances information
+
+- name: Get security groups and rules
+  ec2_group_facts:
+    region: "{{ awsRegion }}"
+    filters:
+      vpc-id: "{{ return_vpcs.vpcs[0].vpc_id }}"
+  register: return_sg_fact
+
+- name: debug
+  debug:
+    var: return_sg_fact
+    verbosity: 3  
+
+- name: Export sg graph
+  template:
+    src: aws-fullsg-instances.dot.j2
+    dest: "{{ asggrapherDotFileToRender }}"
+
+# Render graph

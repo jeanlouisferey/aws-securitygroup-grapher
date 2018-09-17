@@ -1,0 +1,63 @@
+digraph G {
+  graph [fontname = "helvetica"];
+  node [fontname = "helvetica"];
+  edge [fontname = "helvetica"];
+  rankdir={{ asggrapherRankdir }};
+
+{% for sg in return_sg_fact.security_groups %}
+{%     if sg.group_name != "default" or (sg.group_name == "default" and asggrapherShowDefault) %}
+{%        for r in sg.ip_permissions %}
+{%            if r.ip_protocol != "-1" %}
+{%               set MyProtocol = r.ip_protocol %}
+{%            else %}
+{%               set MyProtocol = "any" %}
+{%            endif %}
+{%            if r.to_port is defined %}
+{%               if r.to_port != -1 %}
+{%                  if r.to_port != r.from_port %}
+{%                     set MyPortRange = r.to_port|string + "-" + r.from_port|string %}
+{%                  else %}
+{%                     set MyPortRange = r.to_port %}
+{%                  endif %}
+{%               else %}
+{%                  set MyPortRange = "any" %}
+{%               endif %}
+{%            else %}
+{%               set MyPortRange = "any" %}
+{%            endif %}
+{%            if r.ip_ranges[0] is defined %}
+  "{{ r.ip_ranges[0]['cidr_ip'] }}" -> "{{ sg.group_name }}" [arrowhead=normal,color=blue,label="IN: {{ MyProtocol }} {{ MyPortRange }}"];
+{%            else %}
+{%               set remotegroup_name = return_sg_fact.security_groups | selectattr('group_id', 'equalto', r.user_id_group_pairs[0]['group_id']) | list | map(attribute='group_name') | first %}
+  "{{ remotegroup_name }}" -> "{{ sg.group_name }}" [arrowhead=normal,color=blue,label="IN: {{ MyProtocol }} {{ MyPortRange }}"];
+{%            endif %}
+{%        endfor %}
+{%        for r in sg.ip_permissions_egress %}
+{%            if r.ip_protocol != "-1" %}
+{%               set MyProtocol = r.ip_protocol %}
+{%            else %}
+{%               set MyProtocol = "any" %}
+{%            endif %}
+{%            if r.to_port is defined %}
+{%               if r.to_port != -1 %}
+{%                  if r.to_port != r.from_port %}
+{%                     set MyPortRange = r.to_port|string + "-" + r.from_port|string %}
+{%                  else %}
+{%                     set MyPortRange = r.to_port %}
+{%                  endif %}
+{%               else %}
+{%                 set MyPortRange = "any" %}
+{%               endif %}
+{%            else %}
+{%               set MyPortRange = "any" %}
+{%            endif %}
+{%            if r.ip_ranges[0] is defined %}
+  "{{ r.ip_ranges[0]['cidr_ip'] }}" -> "{{ sg.group_name }}" [arrowhead=inv,color=red,label="OUT: {{ MyProtocol }} {{ MyPortRange }}"];
+{%            else %}
+{%               set remotegroup_name = return_sg_fact.security_groups | selectattr('group_id', 'equalto', r.user_id_group_pairs[0]['group_id']) | list | map(attribute='group_name') | first %}
+  "{{ remotegroup_name }}" -> "{{ sg.group_name }}" [arrowhead=inv,color=red,label="OUT: {{ MyProtocol }} {{ MyPortRange }}"];
+{%            endif %}
+{%        endfor %}
+{%     endif %}
+{% endfor %}
+}
