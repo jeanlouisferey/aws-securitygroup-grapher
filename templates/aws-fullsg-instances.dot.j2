@@ -4,6 +4,26 @@ digraph G {
   edge [fontname = "helvetica"];
   rankdir={{ asggrapherRankdir }};
 
+{% if asggrapherShowInstances %}
+{%    for sg in return_sg_fact.security_groups %}
+{%        if sg.group_name != "default" or (sg.group_name == "default" and asggrapherShowDefault) %}
+  "{{ sg.group_name }}"
+  [
+      shape = record
+      label = <<table border="0" cellspacing="0">
+                  <tr><td ><b>{{ sg.group_name }}</b></td></tr>
+                  <tr><td ><i>{{ asggrapherServerLabel }}</i></td></tr>
+{%           for MyServer in return_instances_fact.instances %}
+{%               if MyServer.security_groups | selectattr('group_name','equalto', sg.group_name) | list | first is defined %}
+                  <tr><td border="1" bgcolor="gray">{{ MyServer.tags.Name }}</td></tr>
+{%               endif %}
+{%           endfor %}
+              </table>>
+  ]
+{%        endif %}
+{%    endfor %}
+{% endif %}  
+
 {% for sg in return_sg_fact.security_groups %}
 {%     if sg.group_name != "default" or (sg.group_name == "default" and asggrapherShowDefault) %}
 {%        for r in sg.ip_permissions %}
