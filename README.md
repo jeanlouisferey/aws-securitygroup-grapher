@@ -17,6 +17,8 @@ To render (i.e. to draw and obtain a graphic file), Graphviz needs to be install
 | **asggrapherAwsRegion** | Name of aws region where your VPC is deployed. (**mandatory**) |
 | **asggrapherAwsVPC** | Name of your VPC. (**mandatory**) |   |   |
 | asggrapherShowDefault | Do you want to see default security group, default value: false |
+| asggrapherShowInstances | Do you want to see instances with their security groups, default value: false |
+| asggrapherServerLabel | Label for instances, used when asggrapherShowInstances = true, default value: Servers |
 | asggrapherRankdir | See <https://www.graphviz.org/doc/info/attrs.html#d:rankdir>, default value: LR |
 | asggrapherDotFileToRender | Path and name of generated dot file , default value: "./awsCloudGrapher.dot" |
 | asggrapherFileToRender | Path and name of generated image file, default value: "./awsCloudGrapher.png" |
@@ -63,6 +65,12 @@ The arrow head is always on the security group which contains the rule represent
 With asggrapherShowDefault: true, you'll have on your graph all the SGs, included the default AWS SG:
 
 ![Example](DefaultSG.jpg)
+
+### asggrapherShowInstances
+
+With asggrapherShowInstances: true, you'll have on your graph all the instances (VM) within SGs used by these instances.
+
+![Example](Instances.png)
 
 ### asggrapherRankdir
 
