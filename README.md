@@ -24,6 +24,8 @@ To render (i.e. to draw and obtain a graphic file), Graphviz needs to be install
 | asggrapherFileToRender | Path and name of generated image file, default value: "./awsCloudGrapher.png" |
 
 ## Example Playbook
+
+aws-sg-grapher.yml:
 ~~~yaml
 ---
   - name: AWS Security group grapher
@@ -35,6 +37,14 @@ To render (i.e. to draw and obtain a graphic file), Graphviz needs to be install
         asggrapherAwsRegion: "eu-west-1"
         asggrapherAwsVPC: "TEST-VPC"
 ~~~
+
+Run it with:
+
+~~~shell
+ansible-playbook aws-sg-grapher.yml
+~~~
+
+After some time, you'll have a awsCloudGrapher.png file with your sg graph.
 
 ## Examples of generated images
 
