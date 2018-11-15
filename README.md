@@ -6,6 +6,8 @@ This role is inspired by https://github.com/jeanlouisferey/openstack-securitygro
 
 ## Requirements
 
+[Ansible](https://www.ansible.com/), of course, because it's an Ansible role.
+
 [Boto](https://aws.amazon.com/fr/sdk-for-python/) library needs to be installed, as that is required by the EC2 Ansible modules.
 
 To render (i.e. to draw and obtain a graphic file), Graphviz needs to be installed.
