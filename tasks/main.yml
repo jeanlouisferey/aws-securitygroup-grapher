@@ -13,13 +13,13 @@
     - asggrapherAwsVPC
 
 - name: verify if dot is installed
-  shell: "dot --help"
+  shell: "dot -V"
   ignore_errors: true
   register: asggraphercmd_out
 
 - name: alert if dot is not installed
   assert:
-    that: asggraphercmd_out.rc != 0
+    that: asggraphercmd_out.rc == 0
     msg: "dot (from graphviz) has to be installed to use this role"
 
 - name: Get VPC information
