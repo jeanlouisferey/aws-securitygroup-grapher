@@ -45,12 +45,13 @@ digraph G {
 {%            else %}
 {%               set MyPortRange = "any" %}
 {%            endif %}
-{%            if r.ip_ranges[0] is defined %}
-  "{{ r.ip_ranges[0]['cidr_ip'] }}" -> "{{ sg.group_name }}" [arrowhead=normal,color=blue,label="IN: {{ MyProtocol }} {{ MyPortRange }}"];
-{%            else %}
-{%               set remotegroup_name = return_sg_fact.security_groups | selectattr('group_id', 'equalto', r.user_id_group_pairs[0]['group_id']) | list | map(attribute='group_name') | first %}
+{%            for ip_range in r.ip_ranges %}
+  "{{ ip_range['cidr_ip'] }}" -> "{{ sg.group_name }}" [arrowhead=normal,color=blue,label="IN: {{ MyProtocol }} {{ MyPortRange }}"];
+{%            endfor %}
+{%            for user_id_group_pair in r.user_id_group_pairs %}
+{%                set remotegroup_name = return_sg_fact.security_groups | selectattr('group_id', 'equalto', user_id_group_pair['group_id']) | list | map(attribute='group_name') | first %}
   "{{ remotegroup_name }}" -> "{{ sg.group_name }}" [arrowhead=normal,color=blue,label="IN: {{ MyProtocol }} {{ MyPortRange }}"];
-{%            endif %}
+{%            endfor %}
 {%        endfor %}
 {%        for r in sg.ip_permissions_egress %}
 {%            if r.ip_protocol != "-1" %}
@@ -71,12 +72,13 @@ digraph G {
 {%            else %}
 {%               set MyPortRange = "any" %}
 {%            endif %}
-{%            if r.ip_ranges[0] is defined %}
-  "{{ r.ip_ranges[0]['cidr_ip'] }}" -> "{{ sg.group_name }}" [arrowhead=inv,color=red,label="OUT: {{ MyProtocol }} {{ MyPortRange }}"];
-{%            else %}
-{%               set remotegroup_name = return_sg_fact.security_groups | selectattr('group_id', 'equalto', r.user_id_group_pairs[0]['group_id']) | list | map(attribute='group_name') | first %}
+{%            for ip_range in r.ip_ranges %}
+  "{{ ip_range['cidr_ip'] }}" -> "{{ sg.group_name }}" [arrowhead=inv,color=red,label="OUT: {{ MyProtocol }} {{ MyPortRange }}"];
+{%            endfor %}
+{%            for user_id_group_pair in r.user_id_group_pairs %}
+{%               set remotegroup_name = return_sg_fact.security_groups | selectattr('group_id', 'equalto', user_id_group_pair['group_id']) | list | map(attribute='group_name') | first %}
   "{{ remotegroup_name }}" -> "{{ sg.group_name }}" [arrowhead=inv,color=red,label="OUT: {{ MyProtocol }} {{ MyPortRange }}"];
-{%            endif %}
+{%            endfor %}
 {%        endfor %}
 {%     endif %}
 {% endfor %}
