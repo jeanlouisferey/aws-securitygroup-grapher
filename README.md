@@ -96,6 +96,11 @@ With asggrapherRankdir: LR, left to right, RL, right to left, TB, top to bottom,
 
 ![Example](TB.png)
 
-### Author Information
+## Author Information
 
 Jean-Louis FEREY
+
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/jeanlouisferey/aws-securitygroup-grapher.svg)](https://starchart.cc/jeanlouisferey/aws-securitygroup-grapher)
+      
